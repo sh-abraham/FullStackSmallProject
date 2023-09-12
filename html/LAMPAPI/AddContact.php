@@ -6,6 +6,8 @@
 	$FirstName = $inData["FirstName"];
 	$LastName = $inData["LastName"];
 	$UserID = $inData["UserID"];
+	$Email = $inData["Email"];
+	$Phone = $inData["Phone"];
 
 	header("Access-Control-Allow-Origin: http://cop4331-f23.com");
 	header("Access-Control-Allow_Methods: POST, OPTIONS");
@@ -19,18 +21,16 @@
 	} 
 	else
 	{
-		try{
-		$stmt = $conn->prepare("INSERT into Contacts (UserID,FirstName,LastName) VALUES(?,?,?)");
-		$stmt->bind_param("sss", $UserID, $FirstName, $LastName);
+		$stmt = $conn->prepare("INSERT into Contacts (UserID,FirstName,LastName,Email,Phone) VALUES(?,?,?,?,?)");
+		$stmt->bind_param("sssss", $UserID, $FirstName, $LastName, $Email, $Phone);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();
 		returnWithError("");
-		}catch (Exception $e) {
-			returnWithError("An error occurred: " . $e->getMessage()); }
 	}
-}catch (Exception $e) {
-	returnWithError("An error occurred: " . $e->getMessage()); }
+
+	}catch (Exception $e) {
+		returnWithError("An error occurred: " . $e->getMessage()); }
 
 	function getRequestInfo()
 	{
