@@ -5,10 +5,10 @@
 	$searchResults = "";
 	$searchCount = 0;
 
-	header("Access-Control-Allow-Origin: http://cop4331-f23.com");
-	header("Access-Control-Allow_Methods: POST, OPTIONS");
-	header("Access-Control-Allow_Headers: Content-Type");
-	header("Access-Control-Max-Age: 86400");
+	#header("Access-Control-Allow-Origin: http://cop4331-f23.com");
+	#header("Access-Control-Allow_Methods: POST, OPTIONS");
+	#header("Access-Control-Allow_Headers: Content-Type");
+	#header("Access-Control-Max-Age: 86400");
 
 	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
 	if ($conn->connect_error) 
@@ -19,7 +19,7 @@
 	{
 		$stmt = $conn->prepare("select FirstName, LastName, Phone, Email from Contacts where ( (CONCAT(FirstName, ' ', LastName) like ? OR FirstName like ? OR LastName like ? OR Email like ? OR Phone like ?) ) and UserID=?");
 		$contactName = "%" . $inData["Search"] . "%";
-		$stmt->bind_param("ssssss", $contactName, $contactName, $contactName, $contactName, $contactName, $inData["UserId"]);
+		$stmt->bind_param("ssssss", $contactName, $contactName, $contactName, $contactName, $contactName, $inData["UserID"]);
 		$stmt->execute();
 		
 		$result = $stmt->get_result();
