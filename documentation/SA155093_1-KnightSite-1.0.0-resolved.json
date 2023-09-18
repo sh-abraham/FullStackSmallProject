@@ -1,376 +1,537 @@
-swagger: '2.0'
-info:
-  description: "Contact manager for UCF Knights"
-  version: 1.0.0
-  title: "Knight's Site"
-  contact:
-    email: sarah.whitfield@ucf.edu
-
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-
-# tags are used for organizing operations
-tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
-
-paths:
-  /AddContact.php:
-    post:
-      tags:
-      - Contacts
-      summary: Adds a contact
-      operationId: addContact
-      description: Adds a contact to the database with their name and contact information.
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: contactItem
-        description: Sends data to add a contact to the system.
-        schema:
-          $ref: '#/definitions/AddContact'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found
-        500:
-          description: Server Error
-      
-  /DeleteContact.php:
-    post:
-      tags:
-      - Contacts
-      summary: Deletes a contact
-      operationId: deleteContact
-      description: Deletes a contact from the database using its ID.
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: contactID
-        description: Contact ID is sent to ensure the correct contact is deleted.
-        schema:
-          $ref: '#/definitions/DeleteContact'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found
-        500:
-          description: Server Error
-          
-  /DeleteUser.php:
-    post:
-      tags:
-      - Users
-      summary: Deletes a user
-      operationId: deleteUser
-      description: Deletes a user using their ID.
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: userID
-        description: UserID is sent to ensure that the correct user is deleted.
-        schema:
-          $ref: '#/definitions/DeleteUser'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found
-        500:
-          description: Server Error
-          
-  /EditContact.php:        
-    post:
-      tags:
-      - Contacts
-      summary: Edit a contact.
-      operationId: editContact
-      description: Edit the name or contact information of a contact.
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: contactItem
-        description: Name and contact information are provided to update contact.
-        schema:
-          $ref: '#/definitions/EditContact'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found
-        500:
-          description: Server Error
-                
-  /GetContact.php:
-    post:
-      tags:
-      - Contacts
-      summary: Returns info for selected contact
-      operationId: getContact
-      description: Returns name, ID, and contact information for one contact
-      consumes: 
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: contactItem
-        description: Contact's ID is provided.
-        schema:
-          $ref: '#/definitions/GetContact'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found 
-          
-  /GetContacts.php:
-    post:
-      tags:
-      - Contacts
-      summary: Returns all contacts
-      operationId: getContacts
-      description: Returns name, ID, and contact information for every contact for a user with the same ID.
-      consumes: 
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: userItem
-        description: User's ID is provided.
-        schema:
-          $ref: '#/definitions/GetContacts'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found 
-          
-  /Login.php:
-    post:
-      tags:
-      - Users
-      summary: Logs into the contacts app
-      operationId: doLogin
-      description: Logs into contacts app using their Login and Password.
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: loginItem
-        description: Login and Password are provided to verify identity.
-        schema:
-          $ref: '#/definitions/Login'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found
-        500:
-          description: Server Error
-          
-  /Register.php:
-    post:
-      tags:
-      - Users
-      summary: Registers a user
-      operationId: doRegister
-      description: Registers a user to the database with their name and login information.
-      consumes: 
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: userItem
-        description: User name and login information are provided to the database.
-        schema:
-          $ref: '#/definitions/UserRegistration'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found
-          
-  /SearchContacts.php:
-    post:
-      tags:
-      - Contacts
-      summary: Searches for a match in contacts
-      operationId: searchContacts
-      description: Searches for a match in the name, email, or phone number of contacts.
-      consumes: 
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - in: body
-        name: searchItem
-        description: Search and User's ID to search are provided.
-        schema:
-          $ref: '#/definitions/SearchContacts'
-      responses:
-        200:
-          description: OK
-        404:
-          description: URL Not Found          
-          
-definitions:
-
-  AddContact:
-    type: object
-    required:
-    - FirstName
-    - LastName
-    - UserID
-    - Email
-    - Phone
-    properties:
-      FirstName:
-        type: string
-        example: "Fred"
-      LastName:
-        type: string
-        example: "Smith"
-      UserID:
-        type: string
-        example: "12"
-      Email:
-        type: string
-        example: "fsmith@gmail.com"
-      Phone:
-        type: string
-        example: "405-555-5555"
-        
-  DeleteContact:
-    type: object
-    required:
-    - ID
-    properties:
-      ID:
-        type: string
-        example: "12"
-        
-  DeleteUser:
-    type: object
-    required:
-    - ID
-    properties:
-      ID:
-        type: string
-        example: "12"
-
-  EditContact:
-    type: object
-    required:
-    - FirstName
-    - LastName
-    - ID
-    - Email
-    - Phone
-    properties:
-      FirstName:
-        type: string
-        example: "Fred"
-      LastName:
-        type: string
-        example: "Smith"
-      ID:
-        type: string
-        example: "12"
-      Email:
-        type: string
-        example: "fsmith@gmail.com"
-      Phone:
-        type: string
-        example: "405-555-5555"     
-         
-  GetContact:
-    type: object
-    required:
-    - ID
-    properties:
-      ID:
-        type: string
-        example: "5"
-         
-  GetContacts:
-    type: object
-    required:
-    - UserID
-    properties:
-      UserID:
-        type: string
-        example: "5"
-                        
-  Login:
-    type: object
-    required:
-    - Login
-    - Password
-    properties:
-      Login:
-        type: string
-        example: "fred"
-      Password:
-        type: string
-        example: "secret"
-         
-  SearchContacts:
-    type: object
-    required:
-    - Search
-    - UserID
-    properties:
-      Search:
-        type: string
-        example: "Mike"
-      UserID:
-        type: string
-        example: "5"
-        
-  UserRegistration:
-    type: object
-    required:
-    - Login
-    - Password
-    - FirstName
-    - LastName
-    properties:
-      Login:
-        type: string
-        example: "fred"
-      Password:
-        type: string
-        example: "secret"
-      FirstName:
-        type: string
-        example: "Fred"
-      LastName:
-        type: string
-        example: "Smith"
-        
-host: cop4331-f23.com
-basePath: /LAMPAPI
-schemes:
-- http
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Contact manager for UCF Knights",
+    "version": "1.0.0",
+    "title": "Knight's Site",
+    "contact": {
+      "email": "sarah.whitfield@ucf.edu"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "cop4331-f23.com",
+  "basePath": "/LAMPAPI",
+  "tags": [
+    {
+      "name": "admins",
+      "description": "Secured Admin-only calls"
+    },
+    {
+      "name": "developers",
+      "description": "Operations available to regular developers"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/AddContact.php": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Adds a contact",
+        "description": "Adds a contact to the database with their name and contact information.",
+        "operationId": "addContact",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "contactItem",
+            "description": "Sends data to add a contact to the system.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/AddContact"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/DeleteContact.php": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Deletes a contact",
+        "description": "Deletes a contact from the database using its ID.",
+        "operationId": "deleteContact",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "contactID",
+            "description": "Contact ID is sent to ensure the correct contact is deleted.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DeleteContact"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/DeleteUser.php": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Deletes a user",
+        "description": "Deletes a user using their ID.",
+        "operationId": "deleteUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "userID",
+            "description": "UserID is sent to ensure that the correct user is deleted.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DeleteUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/EditContact.php": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Edit a contact.",
+        "description": "Edit the name or contact information of a contact.",
+        "operationId": "editContact",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "contactItem",
+            "description": "Name and contact information are provided to update contact.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/EditContact"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/GetContact.php": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Returns info for selected contact",
+        "description": "Returns name, ID, and contact information for one contact",
+        "operationId": "getContact",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "contactItem",
+            "description": "Contact's ID is provided.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/GetContact"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          }
+        }
+      }
+    },
+    "/GetContacts.php": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Returns all contacts",
+        "description": "Returns name, ID, and contact information for every contact for a user with the same ID.",
+        "operationId": "getContacts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "userItem",
+            "description": "User's ID is provided.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/GetContacts"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          }
+        }
+      }
+    },
+    "/Login.php": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Logs into the contacts app",
+        "description": "Logs into contacts app using their Login and Password.",
+        "operationId": "doLogin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "loginItem",
+            "description": "Login and Password are provided to verify identity.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/Register.php": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Registers a user",
+        "description": "Registers a user to the database with their name and login information.",
+        "operationId": "doRegister",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "userItem",
+            "description": "User name and login information are provided to the database.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UserRegistration"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          }
+        }
+      }
+    },
+    "/SearchContacts.php": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Searches for a match in contacts",
+        "description": "Searches for a match in the name, email, or phone number of contacts.",
+        "operationId": "searchContacts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "searchItem",
+            "description": "Search and User's ID to search are provided.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SearchContacts"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "URL Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AddContact": {
+      "type": "object",
+      "required": [
+        "Email",
+        "FirstName",
+        "LastName",
+        "Phone",
+        "UserID"
+      ],
+      "properties": {
+        "FirstName": {
+          "type": "string",
+          "example": "Fred"
+        },
+        "LastName": {
+          "type": "string",
+          "example": "Smith"
+        },
+        "UserID": {
+          "type": "string",
+          "example": "12"
+        },
+        "Email": {
+          "type": "string",
+          "example": "fsmith@gmail.com"
+        },
+        "Phone": {
+          "type": "string",
+          "example": "405-555-5555"
+        }
+      }
+    },
+    "DeleteContact": {
+      "type": "object",
+      "required": [
+        "ID"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "example": "12"
+        }
+      }
+    },
+    "DeleteUser": {
+      "type": "object",
+      "required": [
+        "ID"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "example": "12"
+        }
+      }
+    },
+    "EditContact": {
+      "type": "object",
+      "required": [
+        "Email",
+        "FirstName",
+        "ID",
+        "LastName",
+        "Phone"
+      ],
+      "properties": {
+        "FirstName": {
+          "type": "string",
+          "example": "Fred"
+        },
+        "LastName": {
+          "type": "string",
+          "example": "Smith"
+        },
+        "ID": {
+          "type": "string",
+          "example": "12"
+        },
+        "Email": {
+          "type": "string",
+          "example": "fsmith@gmail.com"
+        },
+        "Phone": {
+          "type": "string",
+          "example": "405-555-5555"
+        }
+      }
+    },
+    "GetContact": {
+      "type": "object",
+      "required": [
+        "ID"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "example": "5"
+        }
+      }
+    },
+    "GetContacts": {
+      "type": "object",
+      "required": [
+        "UserID"
+      ],
+      "properties": {
+        "UserID": {
+          "type": "string",
+          "example": "5"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "required": [
+        "Login",
+        "Password"
+      ],
+      "properties": {
+        "Login": {
+          "type": "string",
+          "example": "fred"
+        },
+        "Password": {
+          "type": "string",
+          "example": "secret"
+        }
+      }
+    },
+    "SearchContacts": {
+      "type": "object",
+      "required": [
+        "Search",
+        "UserID"
+      ],
+      "properties": {
+        "Search": {
+          "type": "string",
+          "example": "Mike"
+        },
+        "UserID": {
+          "type": "string",
+          "example": "5"
+        }
+      }
+    },
+    "UserRegistration": {
+      "type": "object",
+      "required": [
+        "FirstName",
+        "LastName",
+        "Login",
+        "Password"
+      ],
+      "properties": {
+        "Login": {
+          "type": "string",
+          "example": "fred"
+        },
+        "Password": {
+          "type": "string",
+          "example": "secret"
+        },
+        "FirstName": {
+          "type": "string",
+          "example": "Fred"
+        },
+        "LastName": {
+          "type": "string",
+          "example": "Smith"
+        }
+      }
+    }
+  }
+}
